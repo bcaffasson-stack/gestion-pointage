@@ -1,0 +1,38 @@
+# ===== Legacy projet desktop NetBeans (non deploye) =====
+/build/
+/dist/
+/lib/
+/nbproject/
+/src/
+build.xml
+run.bat
+db.sql
+
+# ===== Backend (Java/Maven/Spring Boot) =====
+backend/target/
+backend/pdf-output/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+# ===== Frontend (Node.js / Vite / React) =====
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+frontend/.env.*.local
+npm-debug.log*
+yarn-error.log*
+
+# ===== IDE =====
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Journal / logs =====
+*.log

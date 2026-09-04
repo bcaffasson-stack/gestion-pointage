@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>seed</title></head>
+<body>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token');
+  const user = params.get('user');
+  const theme = params.get('theme');
+  const to = params.get('to') || '/';
+  if (token) localStorage.setItem('token', token);
+  if (user) localStorage.setItem('user', user);
+  localStorage.setItem('theme', theme === 'light' ? 'light' : 'dark');
+  window.location.replace(to);
+</script>
+</body>
+</html>
