@@ -1,9 +1,9 @@
 # Render Blueprint - Deploie le backend Spring Boot + PostgreSQL
-# Utilisation: importer ce fichier dans Render (New > Blueprint) ou
-# creer un Web Service + une PostgreSQL manuellement.
+# Ce fichier doit etre a la RACINE du depot Github (Render le detecte
+# automatiquement via New > Blueprint).
 #
-# Important: ce fichier doit etre a la racine du repertoire backend/
-# de votre depot GitHub.
+# Le backend est dans backend/ (rootDir). Render construit l'image Docker
+# avec backend/Dockerfile et cree la base PostgreSQL pointage-db.
 
 databases:
   - name: pointage-db
@@ -20,10 +20,19 @@ services:
     rootDir: backend
     dockerfilePath: Dockerfile
     envVars:
-      - key: DB_URL
+      # Variables separees pour construire l'URL JDBC postgresql (voir application.properties)
+      - key: DB_HOST
         fromDatabase:
           name: pointage-db
-          property: connectionString
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: pointage-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: pointage-db
+          property: database
       - key: DB_USERNAME
         fromDatabase:
           name: pointage-db
