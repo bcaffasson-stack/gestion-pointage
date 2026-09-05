@@ -42,7 +42,15 @@ public class UtilisateurService {
             throw new RuntimeException("Nom d'utilisateur deja utilise");
         }
         Utilisateur user = new Utilisateur(username, hasher(password), email, nomComplet);
+        user.setMdpAChanger(false);
         return repository.save(user);
+    }
+
+    public void forceChangementMdp(String username) {
+        repository.findByUsernameIgnoreCase(username).ifPresent(u -> {
+            u.setMdpAChanger(true);
+            repository.save(u);
+        });
     }
 
     public Utilisateur modifier(String username, String email, String nomComplet) {
@@ -61,6 +69,7 @@ public class UtilisateurService {
         Utilisateur user = repository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouve"));
         user.setPassword(hasher(newPassword));
+        user.setMdpAChanger(false);
         repository.save(user);
     }
 

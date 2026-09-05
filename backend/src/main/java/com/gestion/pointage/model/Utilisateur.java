@@ -19,6 +19,9 @@ public class Utilisateur {
     @Column(name = "nomcomplet", length = 100)
     private String nomComplet;
 
+    @Column(name = "mdp_a_changer")
+    private Boolean mdpAChanger = false;
+
     public Utilisateur() {}
 
     public Utilisateur(String username, String password, String email, String nomComplet) {
@@ -36,4 +39,6 @@ public class Utilisateur {
     public void setEmail(String email) { this.email = email; }
     public String getNomComplet() { return nomComplet; }
     public void setNomComplet(String nomComplet) { this.nomComplet = nomComplet; }
+    public boolean isMdpAChanger() { return Boolean.TRUE.equals(mdpAChanger); }
+    public void setMdpAChanger(boolean mdpAChanger) { this.mdpAChanger = mdpAChanger; }
 }

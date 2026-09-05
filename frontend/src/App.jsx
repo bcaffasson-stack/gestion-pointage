@@ -1,11 +1,12 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ChangerMdpPage from './pages/ChangerMdpPage';
 import Layout from './components/Layout';
 
 class ErrorBoundary extends React.Component {
@@ -33,10 +34,14 @@ class ErrorBoundary extends React.Component {
 }
 
 function PrivateRoute({ children }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const location = useLocation();
   if (!isAuthenticated) {
     window.location.replace('/login');
     return null;
+  }
+  if (user?.mdpAChanger && location.pathname !== '/changer-mdp') {
+    return <Navigate to="/changer-mdp" replace />;
   }
   return children;
 }
@@ -69,6 +74,7 @@ export default function App() {
               <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
               <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
               <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
+              <Route path="/changer-mdp" element={<PrivateRoute><ChangerMdpPage /></PrivateRoute>} />
               <Route path="/*" element={<PrivateRoute><Layout /></PrivateRoute>} />
             </Routes>
           </ErrorBoundary>

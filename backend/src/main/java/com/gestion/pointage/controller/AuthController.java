@@ -27,7 +27,7 @@ public class AuthController {
                 .map(user -> {
                     String token = jwtUtil.generateToken(user.getUsername(), "Administrateur");
                     return ResponseEntity.ok((Object) new LoginResponse(
-                            token, user.getUsername(), user.getNomComplet(), "Administrateur"));
+                            token, user.getUsername(), user.getNomComplet(), "Administrateur", user.isMdpAChanger()));
                 })
                 .orElse(ResponseEntity.status(401).body(Map.of("error", "Nom d'utilisateur ou mot de passe incorrect")));
     }

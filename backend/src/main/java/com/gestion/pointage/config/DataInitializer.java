@@ -6,6 +6,8 @@ import com.gestion.pointage.service.UtilisateurService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -20,10 +22,21 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         // Chaque compte demarre vide : pas d'employes/pointages/conges par defaut.
-        // L'admin retrouve ses donnees existantes en base (rattachees a son username).
 
         if (utilisateurRepo.count() == 0) {
-            utilisateurRepo.save(new Utilisateur("admin", utilisateurService.hasher("admin"), "admin@pointage.com", "Administrateur"));
+            // Premier lancement : creation de l'admin avec mot de passe par defaut
+            // -> mot de passe a changer obligatoirement a la premiere connexion
+            Utilisateur admin = new Utilisateur("admin", utilisateurService.hasher("admin"), "admin@pointage.com", "Administrateur");
+            admin.setMdpAChanger(true);
+            utilisateurRepo.save(admin);
+        } else {
+            // Si l'admin existe encore avec le mot de passe par defaut, forcer le changement
+            Optional<Utilisateur> admin = utilisateurRepo.findByUsernameIgnoreCase("admin");
+            admin.filter(u -> u.getPassword().equalsIgnoreCase(utilisateurService.hasher("admin")))
+                    .ifPresent(u -> {
+                        u.setMdpAChanger(true);
+                        utilisateurRepo.save(u);
+                    });
         }
     }
 }

@@ -91,9 +91,9 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const { data } = await api.post('/auth/login', { username, password });
-      login({ username: data.username, nomComplet: data.nomComplet, role: data.role }, data.token);
+      login({ username: data.username, nomComplet: data.nomComplet, role: data.role, mdpAChanger: data.mdpAChanger }, data.token);
       window.onpopstate = null;
-      navigate('/', { replace: true });
+      navigate(data.mdpAChanger ? '/changer-mdp' : '/', { replace: true });
     } catch (err) {
       setLoginAttempts(prev => prev + 1);
       const remaining = MAX_ATTEMPTS - loginAttempts - 1;
