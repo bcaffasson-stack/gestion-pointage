@@ -29,7 +29,12 @@ public class AuthController {
                     return ResponseEntity.ok((Object) new LoginResponse(
                             token, user.getUsername(), user.getNomComplet(), "Administrateur", user.isMdpAChanger()));
                 })
-                .orElse(ResponseEntity.status(401).body(Map.of("error", "Nom d'utilisateur ou mot de passe incorrect")));
+                .orElseGet(() -> {
+                    if (service.existe(request.getUsername())) {
+                        return ResponseEntity.status(401).body(Map.of("error", "Mot de passe incorrect"));
+                    }
+                    return ResponseEntity.status(401).body(Map.of("error", "Compte inexistant, veuillez vous inscrire"));
+                });
     }
 
     @PostMapping("/register")
